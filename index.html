@@ -111,6 +111,10 @@ function formatPrincipal(input) {
   // Format the number with thousands separator
   input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 
     function calculateLoan() {
         var principal = parseFloat(document.getElementById("principal").value.replace(/,/g, ''));
@@ -144,7 +148,11 @@ function formatPrincipal(input) {
         balance = 0; // Ensure the balance never goes negative
       }
 
-      result += `<tr><td>${i}</td><td>${balance.toFixed(2)}</td><td>${interestPayment.toFixed(2)}</td><td>${principalPayment.toFixed(2)}</td> <td>${monthlyPayment.toFixed(2)}</td></tr>`;
+      result += `<tr><td>${i}</td>
+        <td>${numberWithCommas(balance.toFixed(2))}</td>
+        <td>${numberWithCommas(interestPayment.toFixed(2))}</td>
+        <td>${numberWithCommas(principalPayment.toFixed(2))}</td> 
+        <td>${numberWithCommas(monthlyPayment.toFixed(2))}</td></tr>`;
       if(balance === 0) break; // Stop the loop if the balance is fully paid
     }
     result += "</table>";
