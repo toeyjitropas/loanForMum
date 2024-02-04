@@ -36,6 +36,8 @@ input[type="number"] {
 input[type="button"] {
   width: 100%;
   background-color: #007bff;
+  font-weight: bold;
+  font-size: 16px;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -98,7 +100,7 @@ tr:nth-child(even) {background-color: #f2f2f2;}
   <label for="years">จำนวนปีที่กู้:</label>
   <input type="number" id="years" name="years"><br><br>
   
-  <input type="button" value="Calculate" onclick="calculateLoan()">
+  <input type="button" value="คำนวน" onclick="calculateLoan()">
 </form>
 
 <div id="loanSchedule"></div>
@@ -125,10 +127,10 @@ function numberWithCommas(x) {
 
   if (!isMonthly) {
     // Convert annual rate to monthly
-    interestRate = (interestRate/12);
+    interestRate = (Math.pow(1 + interestRate, 1/12) - 1) ;
   } else {
     // No need to convert the rate
-    interestRate = interestRate;
+    interestRate = (Math.pow(1 + interestRate, 12) - 1);
   }
   
 
