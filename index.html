@@ -162,7 +162,7 @@ function numberWithCommas(x) {
 
   if (!isNaN(monthlyPayment) && (monthlyPayment != Infinity) && (monthlyPayment > 0)) {
     document.getElementById("loanSchedule").innerHTML = `<h3>ตารางการผ่อนจ่าย</h3><p>จ่ายต่อเดือน: ${numberWithCommas(monthlyPayment.toFixed(2))} บาท</p>`;
-    var result = "<table><tr><th>เดือน</th><th>เงินต้นคงเหลือ</th><th>ดอกเบี้ย</th><th>เงินต้นจ่าย</th><th>จ่ายต่อเดือน</th></tr>";
+    var result = "<table><tr><th>งวด</th><th>เงินต้นคงเหลือ</th><th>ดอกเบี้ย</th><th>เงินต้นจ่าย</th><th>จ่ายต่อเดือน</th></tr>";
     var balance = principal;
     for (var i = 1; i <= payments; i++) {
       var interestPayment = balance * interestRate;
