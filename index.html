@@ -80,7 +80,28 @@ tr:nth-child(even) {background-color: #f2f2f2;}
   margin-top: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow-x: auto; /* Enables horizontal scrolling */
 }
+/* Ensures table is not too small on larger screens */
+@media (min-width: 768px) {
+  table {
+    min-width: 650px; /* Adjust as necessary */
+  }
+}
+
+@media (max-width: 768px) {
+  table, th, td {
+    font-size: 14px; /* Smaller font size for mobile */
+    padding: 4px; /* Adjust padding to save space */
+  }
+  th:nth-child(1), td:nth-child(1) { /* Month column */
+  width: 50px; /* Adjust based on content */
+}
+
+th, td {
+  word-wrap: break-word; /* Ensures text fits within cells */
+}
+}  
 
 </style>
 </head>
