@@ -2,23 +2,100 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loan Calculator</title>
+<title>โปรแกรมคำนวนเงินกู้</title>
 <style>
-  /* Add CSS here to style your web app */
+    body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+h2 {
+  color: #007bff;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="button"] {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="button"]:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+#loanSchedule {
+  background-color: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 </style>
 </head>
 <body>
 
-<h2>Loan Calculator</h2>
+<h2>โปรแกรมคำนวนเงินกู้</h2>
 
 <form id="loanForm">
-  <label for="principal">Principal ($):</label>
-  <input type="number" id="principal" name="principal"><br><br>
+  <label for="principal">เงินต้นทั้งหมด (บาท):</label>
+  <input type="text" id="principal" name="principal" onkeyup="formatPrincipal(this)" placeholder=""><br><br>
   
-  <label for="interest">Annual Interest Rate (%):</label>
-  <input type="number" id="interest" name="interest" step="0.01"><br><br>
+  <label for="interest">ดอกเบี้ย (%):</label>
+<input type="number" id="interest" name="interest" step="0.01" placeholder="1.1"><br>
+<input type="radio" id="monthly" name="interestType" value="monthly">
+<label for="monthly"> ต่อเดือน </label>
+<input type="radio" id="annually" name="interestType" value="annually" checked>
+<label for="annually">ต่อปี </label><br><br>
   
-  <label for="years">Loan Term (Years):</label>
+  <label for="years">จำนวนปีที่กู้:</label>
   <input type="number" id="years" name="years"><br><br>
   
   <input type="button" value="Calculate" onclick="calculateLoan()">
@@ -27,18 +104,36 @@
 <div id="loanSchedule"></div>
 
 <script>
+
+function formatPrincipal(input) {
+  // Remove any existing commas
+  let value = input.value.replace(/,/g, '');
+  // Format the number with thousands separator
+  input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
     function calculateLoan() {
-  var principal = parseFloat(document.getElementById("principal").value);
+        var principal = parseFloat(document.getElementById("principal").value.replace(/,/g, ''));
   var interestRate = parseFloat(document.getElementById("interest").value) / 100 / 12; // Convert annual rate to monthly and percentage
   var years = parseFloat(document.getElementById("years").value);
   var payments = years * 12; // Total number of payments
+  var isMonthly = document.getElementById("monthly").checked;
+
+  if (!isMonthly) {
+    // Convert annual rate to monthly
+    interestRate = (interestRate/12);
+  } else {
+    // No need to convert the rate
+    interestRate = interestRate;
+  }
+  
 
   var x = Math.pow(1 + interestRate, payments); // Compound interest factor
   var monthlyPayment = (principal*x*interestRate)/(x-1);
 
   if (!isNaN(monthlyPayment) && (monthlyPayment != Infinity) && (monthlyPayment > 0)) {
-    document.getElementById("loanSchedule").innerHTML = `<h3>Loan Schedule</h3><p>Monthly Payment: THB ${monthlyPayment.toFixed(2)}</p>`;
-    var result = "<table><tr><th>Month</th><th>Balance</th><th>Interest</th><th>Principal</th><th>Payment</th></tr>";
+    document.getElementById("loanSchedule").innerHTML = `<h3>ตารางการผ่อนจ่าย</h3><p>จ่ายต่อเดือน: ${monthlyPayment.toFixed(2)} บาท</p>`;
+    var result = "<table><tr><th>เดือน</th><th>เงินต้นคงเหลือ</th><th>ดอกเบี้ย</th><th>เงินต้นจ่าย</th><th>จ่ายต่อเดือน</th></tr>";
     var balance = principal;
     for (var i = 1; i <= payments; i++) {
       var interestPayment = balance * interestRate;
