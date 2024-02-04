@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loan Calculator</title>
+<style>
+  /* Add CSS here to style your web app */
+</style>
+</head>
+<body>
+
+<h2>Loan Calculator</h2>
+
+<form id="loanForm">
+  <label for="principal">Principal ($):</label>
+  <input type="number" id="principal" name="principal"><br><br>
+  
+  <label for="interest">Annual Interest Rate (%):</label>
+  <input type="number" id="interest" name="interest" step="0.01"><br><br>
+  
+  <label for="years">Loan Term (Years):</label>
+  <input type="number" id="years" name="years"><br><br>
+  
+  <input type="button" value="Calculate" onclick="calculateLoan()">
+</form>
+
+<div id="loanSchedule"></div>
+
+<script>
+    function calculateLoan() {
+  var principal = document.getElementById("principal").value;
+  var interest = document.getElementById("interest").value / 100 / 12;
+  var payments = document.getElementById("years").value * 12;
+
+  var x = Math.pow(1 + interest, payments);
+  var monthly = (principal * x * interest) / (x - 1);
+
+  if (!isNaN(monthly) && (monthly != Infinity) && (monthly > 0)) {
+    var result = "<h3>Loan Schedule</h3>";
+    result += "<table><tr><th>Month</th><th>Balance</th><th>Interest</th><th>Principal</th></tr>";
+    for (var i = 1; i <= payments; i++) {
+      var interestPayment = (principal * interest);
+      var principalPayment = monthly - interestPayment;
+      principal -= principalPayment;
+      
+      result += "<tr><td>" + i + "</td><td>" + principal.toFixed(2) + "</td><td>" + interestPayment.toFixed(2) + "</td><td>" + principalPayment.toFixed(2) + "</td></tr>";
+    }
+    result += "</table>";
+    document.getElementById("loanSchedule").innerHTML = result;
+  } else {
+    alert("Please, enter a valid number.");
+  }
+}
+
+</script>
+
+</body>
+</html>
